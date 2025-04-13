@@ -52,7 +52,7 @@
         }
     </style>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.8/lib/marked.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body class="text-gray-800 antialiased">
 
@@ -104,14 +104,14 @@
             return response.text();
           })
           .then(markdownText => {
-            // Check if Marked.js library is loaded
-            if (typeof marked === 'function') {
+            // Updated check: Ensure marked object exists and has the parse method
+            if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
               // Parse the fetched Markdown text into HTML
               targetElement.innerHTML = marked.parse(markdownText);
             } else {
-              // Handle case where Marked.js failed to load
-              console.error('Marked.js library not loaded.');
-              targetElement.innerHTML = '<p class="text-red-600 text-center">Error: Markdown library not loaded.</p>';
+              // Handle case where Marked.js failed to load or is unexpected structure
+              console.error('Marked.js library not loaded or parse method not found.');
+              targetElement.innerHTML = '<p class="text-red-600 text-center">Error: Markdown library not loaded correctly.</p>';
             }
           })
           .catch(error => {
