@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjectOSSAI - AI By the Community, For the Community</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind gray-50 */
+        }
+        /* Customizations for prose needed for dynamically rendered content */
+        .prose h1 { /* Style the H1 from README if needed */
+             font-size: 2.25rem; /* Example: text-4xl */
+             margin-bottom: 1em;
+             font-weight: 700;
+             border-bottom: 1px solid #e5e7eb;
+             padding-bottom: 0.5em;
+        }
+        .prose h2 {
+             margin-top: 1.8em;
+             margin-bottom: 1em;
+             padding-bottom: 0.3em;
+             border-bottom: 1px solid #e5e7eb; /* Tailwind gray-200 */
+        }
+         .prose h3 {
+             margin-top: 1.5em;
+             margin-bottom: 0.5em;
+        }
+        /* Ensure links rendered from markdown are styled */
+        .prose a {
+            color: #2563eb; /* Tailwind blue-600 */
+            text-decoration: none;
+        }
+        .prose a:hover {
+            text-decoration: underline;
+        }
+        /* Style code blocks if needed */
+        .prose pre {
+             background-color: #f3f4f6; /* Tailwind gray-100 */
+             padding: 1em;
+             border-radius: 0.375rem; /* rounded-md */
+             overflow-x: auto;
+        }
+        .prose code {
+             font-size: 0.875em;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="text-gray-800 antialiased">
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <article class="prose lg:prose-xl mx-auto bg-white p-6 sm:p-10 rounded-lg shadow-sm border border-gray-200">
+
+            <header class="mb-8 text-center border-b border-gray-200 pb-6 not-prose"> <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 text-gray-900">
+                    Project Open Source AI (ProjectOSSAI)
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-600 mt-0 mb-4">
+                    AI By the Community, For the Community
+                </p>
+                <p class="text-sm text-gray-500">
+                    </p>
+            </header>
+
+            <div id="readme-content">
+                <p class="text-center text-gray-500">Loading README content...</p>
+            </div>
+
+        </article> </main>
+
+    <footer class="text-gray-600 py-6 text-center mt-8">
+        <div class="container mx-auto px-6">
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> ProjectOSSAI. All rights reserved (or specify license).</p>
+        </div>
+    </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const targetElement = document.getElementById('readme-content');
+        // Assumes README.md is in the same directory (root) as index.html on GitHub Pages
+        const readmeUrl = 'README.md';
+
+        if (!targetElement) {
+          console.error('Target element #readme-content not found.');
+          return;
+        }
+
+        // Fetch the README.md file
+        fetch(readmeUrl)
+          .then(response => {
+            // Check if the response status is OK (e.g., 200)
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status} - Could not fetch ${readmeUrl}`);
+            }
+            // Get the response body as plain text
+            return response.text();
+          })
+          .then(markdownText => {
+            // Check if Marked.js library is loaded
+            if (typeof marked === 'function') {
+              // Parse the fetched Markdown text into HTML
+              targetElement.innerHTML = marked.parse(markdownText);
+            } else {
+              // Handle case where Marked.js failed to load
+              console.error('Marked.js library not loaded.');
+              targetElement.innerHTML = '<p class="text-red-600 text-center">Error: Markdown library not loaded.</p>';
+            }
+          })
+          .catch(error => {
+            // Handle errors during the fetch operation or if the file doesn't exist
+            console.error('Error fetching or rendering README.md:', error);
+            targetElement.innerHTML = `<p class="text-red-600 text-center">Error loading README.md: ${error.message}. Please ensure README.md exists at the root of your site.</p>`;
+          });
+      });
+    </script>
+
+</body>
+</html>
